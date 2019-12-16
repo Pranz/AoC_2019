@@ -52,7 +52,7 @@ part2 :: IO ()
 part2 = do
     input <- lines <$> readFile "./aoc6_input"
     let orbits = M.fromList $ map parseOrbit input
-    let path1 = orbitPath "SAN" 0 orbits
-    let path2 = orbitPath "YOU" 0 orbits
-    let merged = M.intersectionWith ((pred . pred) .: (+)) path1 path2
+    let path1 = orbitPath "SAN" (-1) orbits
+    let path2 = orbitPath "YOU" (-1) orbits
+    let merged = M.intersectionWith (+) path1 path2
     print $ foldr min 2000000 merged
