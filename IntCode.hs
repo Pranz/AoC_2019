@@ -75,6 +75,16 @@ data Instruction
     | Equals Parameter Parameter Parameter
     | Halt
 
+runMachineFullOutput :: [Int] -> [Int] -> [Int]
+runMachineFullOutput ls input =
+    let (output, state) = runState (runUntilHalt 0 input) (listArray (0, subtract 1 . length $ ls) ls)
+    in output
+
+runMachine' :: [Int] -> [Int] -> Int
+runMachine' ls input =
+    let (output, state) = runState (runUntilHalt 0 input) (listArray (0, subtract 1 . length $ ls) ls)
+    in head output
+
 runMachine :: [Int] -> [Int] -> IO ()
 runMachine ls input = do
     let res = runState (runUntilHalt 0 input) (listArray (0, subtract 1 . length $ ls) ls)
