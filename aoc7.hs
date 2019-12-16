@@ -42,22 +42,12 @@ runWithPhases phases = do
     sequence prog
 
 -- Part 2
-
-test3 :: [Int]
-test3 = [3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5]
-
 runFeedback :: [Int] -> Int
 runFeedback phases = last out5
-    where in1 = (phases !! 0) : 0 : out5
-          in2 = (phases !! 1) : out1
-          in3 = (phases !! 2) : out2
-          in4 = (phases !! 3) : out3
-          in5 = (phases !! 4) : out4
-          out1 = reverse $ runWithInputFull in1 prog
-          out2 = reverse $ runWithInputFull in2 prog
-          out3 = reverse $ runWithInputFull in3 prog
-          out4 = reverse $ runWithInputFull in4 prog
-          out5 = reverse $ runWithInputFull in5 prog
+    where [in1, in2, in3, in4, in5] = zipWith (:) phases [out5, out1, out2, out3, out4]
+          [out1, out2, out3, out4, out5'] = map runM [in1, in2, in3, in4, in5]
+          out5 = 0 : out5'
+          runM = reverse . runMachineFullOutput prog
 
 tryAllPhases' = do
     phase <- permutations [5, 6, 7, 8, 9]
